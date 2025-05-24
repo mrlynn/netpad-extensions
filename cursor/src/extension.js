@@ -16,14 +16,24 @@ class NetPadCursorExtension {
     this.context = context;
     this.outputChannel = vscode.window.createOutputChannel('NetPad');
     
-    // Initialize API client
-    await this.initializeApiClient();
-    
-    // Fetch available tools on startup
-    await this.fetchTools();
-    
-    // Register commands
+    // Register commands first (this is critical for activation)
     this.registerCommands();
+    
+    // Initialize API client (don't fail if this fails)
+    try {
+      await this.initializeApiClient();
+    } catch (error) {
+      this.log(`API client initialization failed: ${error.message}`);
+    }
+    
+    // Try to fetch available tools, but don't fail if no API key
+    try {
+      if (this.apiClient) {
+        await this.fetchTools();
+      }
+    } catch (error) {
+      this.log(`Tool fetching failed: ${error.message}`);
+    }
     
     // Setup configuration watcher
     this.setupConfigurationWatcher();
@@ -41,45 +51,50 @@ class NetPadCursorExtension {
     const timeout = config.get('timeout') || 30000;
 
     if (!apiKey) {
-      vscode.window.showWarningMessage('NetPad API key not configured. Please set it in settings or environment variables.');
-      return;
+      this.log('NetPad API key not configured. Some features will be limited.');
+      // Don't return early - allow extension to activate without API key
     }
 
-    this.apiClient = axios.create({
-      baseURL: apiUrl,
-      timeout: timeout,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
-        'User-Agent': 'NetPad-Cursor-Extension/1.0.0'
-      }
-    });
-
-    // Add interceptors for better error handling and logging
-    this.apiClient.interceptors.request.use(
-      config => {
-        this.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-        return config;
-      },
-      error => {
-        this.log(`Request Error: ${error.message}`);
-        return Promise.reject(error);
-      }
-    );
-
-    this.apiClient.interceptors.response.use(
-      response => {
-        this.log(`API Response: ${response.status} ${response.statusText}`);
-        return response;
-      },
-      error => {
-        this.log(`Response Error: ${error.message}`);
-        if (error.response) {
-          this.log(`Error Details: ${JSON.stringify(error.response.data, null, 2)}`);
+    // Only create API client if we have an API key
+    if (apiKey) {
+      this.apiClient = axios.create({
+        baseURL: apiUrl,
+        timeout: timeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+          'User-Agent': 'NetPad-Cursor-Extension/1.0.0'
         }
-        return Promise.reject(error);
-      }
-    );
+      });
+    }
+
+    // Add interceptors for better error handling and logging (only if client exists)
+    if (this.apiClient) {
+      this.apiClient.interceptors.request.use(
+        config => {
+          this.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+          return config;
+        },
+        error => {
+          this.log(`Request Error: ${error.message}`);
+          return Promise.reject(error);
+        }
+      );
+
+      this.apiClient.interceptors.response.use(
+        response => {
+          this.log(`API Response: ${response.status} ${response.statusText}`);
+          return response;
+        },
+        error => {
+          this.log(`Response Error: ${error.message}`);
+          if (error.response) {
+            this.log(`Error Details: ${JSON.stringify(error.response.data, null, 2)}`);
+          }
+          return Promise.reject(error);
+        }
+      );
+    }
   }
 
   /**
@@ -364,6 +379,18 @@ class NetPadCursorExtension {
    */
   async getTools() {
     try {
+      if (!this.apiClient) {
+        vscode.window.showErrorMessage('NetPad API not configured. Please set your API key in settings.');
+        this.showResults('NetPad Configuration Required', 
+          'To use NetPad tools, please configure your API credentials:\n\n' +
+          '1. Open Settings (Cmd/Ctrl + ,)\n' +
+          '2. Search for "netpad"\n' +
+          '3. Set your NetPad API URL and API Key\n\n' +
+          'Extension is loaded and ready to use once configured!'
+        );
+        return;
+      }
+
       await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         title: "Fetching available tools...",
@@ -497,12 +524,26 @@ let extensionInstance = null;
 
 async function activate(context) {
   try {
+    console.log('NetPad Cursor extension: Starting activation...');
     extensionInstance = new NetPadCursorExtension();
     await extensionInstance.initialize(context);
     console.log('NetPad Cursor extension activated successfully');
+    
+    // Show a success message to confirm activation
+    vscode.window.showInformationMessage('NetPad extension loaded! Use Command Palette to access NetPad commands.');
   } catch (error) {
     console.error('Failed to activate NetPad extension:', error);
     vscode.window.showErrorMessage(`NetPad extension activation failed: ${error.message}`);
+    
+    // Still register at least the getTools command even if initialization fails
+    try {
+      const disposable = vscode.commands.registerCommand('netpad.getTools', () => {
+        vscode.window.showErrorMessage('NetPad extension failed to initialize properly. Please check the console for errors.');
+      });
+      context.subscriptions.push(disposable);
+    } catch (fallbackError) {
+      console.error('Even fallback command registration failed:', fallbackError);
+    }
   }
 }
 

@@ -1,0 +1,12 @@
+.vscode/
+.vscodeignore
+scripts/
+*.vsix
+*.log
+.env
+.DS_Store
+package-lock.json
+CONTRIBUTING.md
+CHANGELOG.md
+manifest.json
+

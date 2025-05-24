@@ -1,31 +1,240 @@
 {
-    "name": "netpad-cursor",
-    "version": "1.0.0",
-    "description": "NetPad AI assistant for Cursor editor",
-    "main": "src/extension.js",
-    "publisher": "michael-lynn", 
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/mrlynn/netpad-cursor-extensions"
-    },
-    "bugs": {
-      "url": "https://github.com/mrlynn/netpad-cursor-extensions/issues"
-    },
-    "icon": "media/netpad.png",
-    "engines": {
-      "vscode": "^1.85.0"
-    },
-    "scripts": {
-      "test": "node ../scripts/testNetPadIntegration.js"
-    },
-    "activationEvents": [
-      "*"
+  "name": "netpad-cursor",
+  "displayName": "NetPad for Cursor",
+  "description": "🚀 AI-powered code intelligence: Advanced analysis, data lineage extraction, and smart refactoring for modern developers",
+  "version": "1.0.1",
+  "publisher": "michael-lynn",
+  "engines": {
+    "vscode": "^1.74.0",
+    "cursor": "^0.1.0"
+  },
+  "icon": "media/netpad.png",
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "artificial intelligence",
+    "code analysis",
+    "data lineage",
+    "refactoring",
+    "sql analysis",
+    "etl",
+    "code intelligence",
+    "netpad",
+    "cursor",
+    "developer tools",
+    "productivity",
+    "machine learning",
+    "code quality",
+    "optimization"
+  ],
+  "activationEvents": [
+    "onCommand:netpad.analyzeCode",
+    "onCommand:netpad.explainCode",
+    "onCommand:netpad.refactorCode",
+    "onCommand:netpad.extractDataLineage",
+    "onCommand:netpad.getTools",
+    "onCommand:netpad.runCustomWorkflow",
+    "onCommand:netpad.sqlMetadataLookup",
+    "onCommand:netpad.openSidebar"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "netpad.analyzeCode",
+        "title": "🔍 Analyze Code",
+        "category": "NetPad",
+        "icon": "$(search)"
+      },
+      {
+        "command": "netpad.explainCode",
+        "title": "💬 Explain Code",
+        "category": "NetPad",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "netpad.refactorCode",
+        "title": "🔧 Refactor Code",
+        "category": "NetPad",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "netpad.extractDataLineage",
+        "title": "🌐 Extract Data Lineage",
+        "category": "NetPad",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "netpad.getTools",
+        "title": "🛠️ Get Available Tools",
+        "category": "NetPad",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "netpad.runCustomWorkflow",
+        "title": "⚙️ Run Custom Workflow",
+        "category": "NetPad",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "netpad.sqlMetadataLookup",
+        "title": "🗄️ SQL Metadata Lookup",
+        "category": "NetPad",
+        "icon": "$(database)"
+      },
+      {
+        "command": "netpad.openSidebar",
+        "title": "📋 Open NetPad Sidebar",
+        "category": "NetPad",
+        "icon": "$(sidebar-left)"
+      }
     ],
-    "dependencies": {
-      "axios": "^1.6.0",
-      "dotenv": "^16.5.0"
+    "menus": {
+      "editor/context": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection",
+          "group": "netpad@1"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection",
+          "group": "netpad@2"
+        },
+        {
+          "command": "netpad.refactorCode",
+          "when": "editorHasSelection",
+          "group": "netpad@3"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection",
+          "group": "netpad@4"
+        },
+        {
+          "command": "netpad.sqlMetadataLookup",
+          "when": "editorHasSelection && editorLangId =~ /sql/",
+          "group": "netpad@5"
+        },
+        {
+          "command": "netpad.runCustomWorkflow",
+          "when": "editorHasSelection",
+          "group": "netpad@6"
+        },
+        {
+          "command": "netpad.getTools",
+          "group": "netpad@7"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.refactorCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.sqlMetadataLookup",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.runCustomWorkflow",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.getTools"
+        },
+        {
+          "command": "netpad.openSidebar"
+        }
+      ]
     },
-    "devDependencies": {
-      "@types/vscode": "^1.74.0"
-    }
-  }
+    "configuration": {
+      "title": "NetPad",
+      "properties": {
+        "netpad.apiUrl": {
+          "type": "string",
+          "default": "https://netpad.io/api/mcp",
+          "description": "NetPad API base URL",
+          "order": 1
+        },
+        "netpad.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NetPad API key (required for authentication)",
+          "order": 2
+        },
+        "netpad.timeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "Request timeout in milliseconds",
+          "minimum": 5000,
+          "maximum": 120000,
+          "order": 3
+        },
+        "netpad.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable detailed logging for debugging",
+          "order": 4
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "netpad.analyzeCode",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "netpad.explainCode",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "netpad.refactorCode",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node ../scripts/testNetPadIntegration.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@vscode/vsce": "^2.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrlynn/netpad-cursor-extensions"
+  },
+  "bugs": {
+    "url": "https://github.com/mrlynn/netpad-cursor-extensions/issues"
+  },
+  "homepage": "https://github.com/mrlynn/netpad-cursor-extensions#readme",
+  "license": "MIT"
+}
