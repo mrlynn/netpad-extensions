@@ -1,0 +1,150 @@
+{
+  "name": "netpad-vscode",
+  "displayName": "NetPad",
+  "description": "AI-powered code analysis and assistance via NetPad API",
+  "version": "1.0.0",
+  "publisher": "your-publisher-name",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "icon": "media/netpad.png",
+  "categories": ["Other", "Machine Learning"],
+  "keywords": ["ai", "code-analysis", "mcp", "netpad", "cursor"],
+  "activationEvents": [
+    "onCommand:netpad.analyzeCode",
+    "onCommand:netpad.explainCode",
+    "onCommand:netpad.refactorCode",
+    "onCommand:netpad.getTools"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "netpad.analyzeCode",
+        "title": "Analyze Code",
+        "category": "NetPad",
+        "icon": "$(search)"
+      },
+      {
+        "command": "netpad.explainCode", 
+        "title": "Explain Code",
+        "category": "NetPad",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "netpad.refactorCode",
+        "title": "Refactor Code", 
+        "category": "NetPad",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "netpad.getTools",
+        "title": "Get Available Tools",
+        "category": "NetPad",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "netpad.extractDataLineage",
+        "title": "Extract Data Lineage",
+        "category": "NetPad",
+        "icon": "$(git-branch)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection",
+          "group": "netpad@1"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection", 
+          "group": "netpad@2"
+        },
+        {
+          "command": "netpad.refactorCode",
+          "when": "editorHasSelection",
+          "group": "netpad@3"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection",
+          "group": "netpad@4"
+        },
+        {
+          "separator": "",
+          "group": "netpad@5"
+        },
+        {
+          "command": "netpad.getTools",
+          "group": "netpad@6"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.refactorCode", 
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.getTools"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "NetPad",
+      "properties": {
+        "netpad.apiUrl": {
+          "type": "string",
+          "default": "https://netpad.io/api/mcp",
+          "description": "NetPad API base URL",
+          "order": 1
+        },
+        "netpad.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NetPad API key (required for authentication)",
+          "order": 2
+        },
+        "netpad.timeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "Request timeout in milliseconds",
+          "minimum": 5000,
+          "maximum": 120000,
+          "order": 3
+        },
+        "netpad.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable detailed logging for debugging",
+          "order": 4
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@vscode/vsce": "^2.19.0"
+  }
+}

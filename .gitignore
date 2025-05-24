@@ -1,0 +1,8 @@
+# Node modules
+node_modules/
+*.vsix
+
+# Local environment and logs
+.env
+*.log
+
