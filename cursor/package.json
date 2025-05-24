@@ -2,7 +2,7 @@
   "name": "netpad-cursor",
   "displayName": "NetPad for Cursor",
   "description": "🚀 AI-powered code intelligence: Advanced analysis, data lineage extraction, and smart refactoring for modern developers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "michael-lynn",
   "engines": {
     "vscode": "^1.74.0",

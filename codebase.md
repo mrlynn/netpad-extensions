@@ -21,7 +21,103 @@ node_modules/
 .env
 *.log
 
+CLAUDE.md
 
+```
+
+# CLAUDE.md
+
+```md
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+NetPad Extensions is a monorepo containing AI-powered code analysis extensions for both VSCode and Cursor editors. The extensions integrate with the NetPad API to provide intelligent code insights, refactoring suggestions, data lineage extraction, and SQL metadata analysis.
+
+## Architecture
+
+### Repository Structure
+- `vscode/` - VSCode extension implementation
+- `cursor/` - Cursor extension implementation  
+- `common/` - Shared API client and utilities
+- `scripts/` - Development and testing scripts
+
+### Key Components
+- **API Client** (`common/apiClient.js`): Centralized NetPad API communication with retry logic, error handling, and configuration management
+- **Extension Logic** (`*/src/extension.js`): Editor-specific command registration and UI integration
+- **Command System**: Unified command structure across both editors for code analysis, explanation, refactoring, data lineage extraction, and tool discovery
+
+## Development Commands
+
+### Testing
+\`\`\`bash
+# Run comprehensive API integration tests
+npm test
+
+# Run test script directly
+node scripts/testNetPadIntegration.js
+\`\`\`
+
+### Packaging
+\`\`\`bash
+# Package VSCode extension
+cd vscode && npm run package
+
+# Package Cursor extension  
+cd cursor && npm run package
+\`\`\`
+
+### Development
+\`\`\`bash
+# Install dependencies (run in both vscode/ and cursor/ directories)
+npm install
+
+# Test API connectivity
+node scripts/testCommand.js
+\`\`\`
+
+## Configuration
+
+Both extensions require NetPad API configuration via:
+- VS Code settings (`netpad.apiUrl`, `netpad.apiKey`, `netpad.timeout`, `netpad.enableLogging`)
+- Environment variables (`NETPAD_API_URL`, `NETPAD_API_KEY`, `NETPAD_TIMEOUT`)
+- `.env` file in project root
+
+## Extension Features
+
+### Core Commands
+- **Code Analysis**: Comprehensive code analysis with complexity and pattern detection
+- **Code Explanation**: Detailed explanations of code functionality
+- **Refactoring Suggestions**: Intelligent code improvement recommendations
+- **Data Lineage Extraction**: Analysis of data flow in ETL pipelines
+- **SQL Metadata Lookup**: Database schema and query analysis
+- **Custom Workflows**: Specialized analysis workflows (security audits, performance analysis)
+- **Tool Discovery**: Exploration of available NetPad capabilities
+
+### API Integration Patterns
+- All commands follow the `/command` endpoint pattern with `type` and `input` parameters
+- Custom workflows use the `/workflow/run` endpoint with graph-based execution
+- Tool discovery uses the `/tools` endpoint for capability exploration
+- Error handling includes retry logic with exponential backoff
+- Progress notifications and output channel integration for user feedback
+
+## Common Development Tasks
+
+When modifying extensions:
+1. Update both VSCode and Cursor implementations to maintain feature parity
+2. Test API integration using `scripts/testNetPadIntegration.js`
+3. Verify command registration in both `package.json` (VSCode) and `manifest.json` (Cursor)
+4. Ensure error handling and user feedback consistency
+5. Update configuration schemas if adding new settings
+
+When adding new commands:
+1. Add to both extension manifests
+2. Implement in both extension files
+3. Add menu entries and keyboard shortcuts
+4. Include in comprehensive test suite
+5. Update documentation examples
 ```
 
 # common/apiClient.js
@@ -349,16 +445,463 @@ module.exports = {
 # cursor/.vscodeignore
 
 ```
-node_modules/
 .vscode/
 .vscodeignore
 scripts/
 *.vsix
 *.log
-*.md
 .env
+.DS_Store
+package-lock.json
+CONTRIBUTING.md
+CHANGELOG.md
+manifest.json
 
 
+```
+
+# cursor/CHANGELOG.md
+
+```md
+# Changelog
+
+All notable changes to the NetPad for Cursor extension will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2024-05-24
+
+### 🎉 Initial Release
+
+#### ✨ Added
+- **Core Analysis Features**
+  - Code analysis with comprehensive insights
+  - Intelligent code explanation
+  - Smart refactoring suggestions
+  - Data lineage extraction for ETL pipelines
+  - SQL metadata analysis and optimization
+
+- **Cursor IDE Integration**
+  - Native context menu integration (right-click any code)
+  - Command palette support for all NetPad commands
+  - Keyboard shortcuts for common operations
+  - Beautiful output panel with syntax highlighting
+  - Progress indicators for long-running operations
+
+- **Commands Available**
+  - `NetPad: Analyze Code` - Deep code analysis
+  - `NetPad: Explain Code` - Detailed code explanations  
+  - `NetPad: Refactor Code` - Smart refactoring suggestions
+  - `NetPad: Extract Data Lineage` - ETL pipeline analysis
+  - `NetPad: SQL Metadata Lookup` - Database schema analysis
+  - `NetPad: Run Custom Workflow` - Extensible analysis framework
+  - `NetPad: Get Available Tools` - Discover NetPad capabilities
+
+- **Configuration & Setup**
+  - Flexible API configuration (settings, environment variables)
+  - Automatic language detection
+  - Configurable timeouts and logging
+  - Enterprise-ready deployment options
+
+- **User Experience**
+  - Graceful degradation when API is not configured
+  - Helpful error messages and troubleshooting guidance
+  - Comprehensive documentation and examples
+  - Professional README with installation guides
+
+#### 🔧 Technical Features
+- **Robust Error Handling**
+  - Extension activates even without API credentials
+  - Intelligent retry logic with exponential backoff
+  - Detailed logging for troubleshooting
+  - Fallback command registration for reliability
+
+- **API Integration**
+  - NetPad API client with authentication
+  - Request/response interceptors for monitoring
+  - Configurable endpoints and timeouts
+  - Support for custom NetPad instances
+
+- **Code Quality**
+  - ESLint configuration for code consistency
+  - Comprehensive test suite
+  - JSDoc documentation for all public APIs
+  - Modern ES6+ JavaScript patterns
+
+#### 🎨 UI/UX Enhancements
+- **Context-Aware Menus**
+  - Commands only appear when relevant (e.g., SQL commands for SQL files)
+  - Organized submenu structure for better discoverability
+  - Consistent iconography across all commands
+
+- **Keyboard Shortcuts**
+  - `Ctrl/Cmd + Alt + A` - Analyze Code
+  - `Ctrl/Cmd + Alt + E` - Explain Code  
+  - `Ctrl/Cmd + Alt + R` - Refactor Code
+
+- **Output Formatting**
+  - Timestamped analysis results
+  - Clear section headers and formatting
+  - Automatic output panel display
+  - Copy-friendly result formatting
+
+#### 📚 Documentation
+- **Comprehensive README**
+  - Beautiful, modern design with badges and sections
+  - Real-world use cases with code examples
+  - Step-by-step installation and configuration guides
+  - Troubleshooting section with common issues
+
+- **Developer Documentation**
+  - Contributing guidelines for open source contributors
+  - Code style standards and best practices
+  - Testing instructions and guidelines
+  - Architecture overview and extension development tips
+
+- **User Guides**
+  - Quick start guide for immediate productivity
+  - Advanced configuration options
+  - Enterprise deployment guidance
+  - API integration examples
+
+#### 🏗️ Architecture Decisions
+- **Class-Based Extension Structure**
+  - Clean separation of concerns
+  - Modular command handling
+  - Extensible architecture for future features
+  - Proper resource cleanup on deactivation
+
+- **Configuration Management**
+  - Multiple configuration sources (settings, environment, defaults)
+  - Real-time configuration updates without restart
+  - Validation and error handling for configuration
+
+- **API Client Design**
+  - Axios-based HTTP client with interceptors
+  - Automatic retry logic for resilience
+  - Comprehensive error handling and user feedback
+  - Support for different authentication methods
+
+### 🔍 Supported Languages
+- JavaScript/TypeScript
+- Python
+- Java
+- C#/.NET
+- C/C++
+- Go
+- Rust
+- PHP
+- Ruby
+- SQL (all major dialects)
+- JSON/YAML
+- And more...
+
+### 🎯 Target Users
+- **Data Engineers**: ETL pipeline analysis and data lineage extraction
+- **Backend Developers**: API pattern analysis and database optimization
+- **Full-Stack Developers**: Cross-language code intelligence
+- **DevOps Engineers**: Infrastructure-as-code analysis
+- **Database Administrators**: SQL optimization and schema analysis
+- **Team Leads**: Code quality assessment and refactoring guidance
+
+### 📊 Performance Metrics
+- **Extension Size**: ~45KB packaged
+- **Activation Time**: <500ms typical
+- **Memory Usage**: <10MB during operation
+- **API Response Time**: 2-10s depending on analysis complexity
+
+### 🔒 Security Features
+- **API Key Protection**: Secure credential storage
+- **No Code Upload**: Analysis happens server-side with API calls
+- **Enterprise Support**: Custom endpoint configuration
+- **Audit Logging**: Comprehensive request/response logging
+
+---
+
+## [Unreleased]
+
+### 🚀 Planned Features
+- **Enhanced Data Lineage**
+  - Interactive lineage diagrams
+  - Export to common formats (JSON, GraphML)
+  - Impact analysis for schema changes
+
+- **Advanced SQL Features**
+  - Query performance profiling
+  - Index usage analysis
+  - Migration script generation
+
+- **Team Collaboration**
+  - Shared analysis results
+  - Team configuration templates
+  - Code review integration
+
+- **IDE Enhancements**
+  - Inline code suggestions
+  - Sidebar panel for persistent results
+  - Custom workflow templates
+
+### 🔧 Technical Improvements
+- **Performance Optimizations**
+  - Caching for repeated analyses
+  - Background processing for large files
+  - Incremental analysis updates
+
+- **Testing & Quality**
+  - Automated integration testing
+  - Performance benchmarking
+  - User experience testing
+
+### 📱 Platform Expansion
+- **VS Code Parity**: Feature alignment with VS Code extension
+- **Additional IDEs**: Support for other editors
+- **CLI Tool**: Command-line interface for CI/CD integration
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+
+## Support
+
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/mrlynn/netpad-cursor-extensions/discussions)
+- 📖 **Documentation**: [Project Wiki](https://github.com/mrlynn/netpad-cursor-extensions/wiki)
+- 🆘 **General Help**: [NetPad Support](https://netpad.io/support)
+```
+
+# cursor/CONTRIBUTING.md
+
+```md
+# Contributing to NetPad for Cursor
+
+We love your input! We want to make contributing to NetPad for Cursor as easy and transparent as possible, whether it's:
+
+- Reporting a bug
+- Discussing the current state of the code
+- Submitting a fix
+- Proposing new features
+- Becoming a maintainer
+
+## 🚀 Quick Start for Contributors
+
+### Prerequisites
+- Node.js (v16 or higher)
+- Cursor IDE
+- Git
+
+### Development Setup
+
+\`\`\`bash
+# Fork and clone the repository
+git clone https://github.com/YOUR_USERNAME/netpad-cursor-extensions.git
+cd netpad-cursor-extensions/cursor
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Package for testing
+npm run package
+\`\`\`
+
+## 🐛 Reporting Bugs
+
+We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/mrlynn/netpad-cursor-extensions/issues/new); it's that easy!
+
+**Great Bug Reports** tend to have:
+
+- A quick summary and/or background
+- Steps to reproduce
+  - Be specific!
+  - Give sample code if you can
+- What you expected would happen
+- What actually happens
+- Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
+
+### Bug Report Template
+
+\`\`\`markdown
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Environment:**
+ - OS: [e.g. macOS, Windows, Linux]
+ - Cursor Version: [e.g. 0.22.0]
+ - Extension Version: [e.g. 1.0.0]
+
+**Additional context**
+Add any other context about the problem here.
+\`\`\`
+
+## 💡 Suggesting Features
+
+We use GitHub issues to track feature requests as well. When suggesting a feature:
+
+1. **Check existing issues** to see if it's already been suggested
+2. **Describe the problem** your feature would solve
+3. **Describe the solution** you'd like to see
+4. **Consider alternatives** - what other solutions have you considered?
+
+## 🔧 Contributing Code
+
+### Our Development Process
+
+We use GitHub flow, so all code changes happen through pull requests:
+
+1. Fork the repo and create your branch from `main`
+2. If you've added code that should be tested, add tests
+3. If you've changed APIs, update the documentation
+4. Ensure the test suite passes
+5. Make sure your code lints
+6. Issue that pull request!
+
+### Pull Request Process
+
+1. Update the README.md with details of changes to the interface
+2. Update the version numbers in any examples files and the README.md to the new version
+3. You may merge the Pull Request in once you have the sign-off of two other developers
+
+### Code Style
+
+- We use ESLint for JavaScript linting
+- Follow existing code patterns and conventions
+- Add comments for complex logic
+- Use descriptive variable and function names
+
+## 📋 Coding Standards
+
+### JavaScript/Node.js Guidelines
+
+- Use `const` and `let` instead of `var`
+- Use meaningful variable names
+- Write JSDoc comments for public functions
+- Handle errors gracefully
+- Use async/await instead of callbacks when possible
+
+### Extension Development Guidelines
+
+- Follow VS Code extension best practices
+- Handle activation/deactivation properly
+- Provide good error messages to users
+- Test with different API states (configured/not configured)
+- Consider performance impact of operations
+
+## 🧪 Testing
+
+### Running Tests
+
+\`\`\`bash
+# Run all tests
+npm test
+
+# Run integration tests with NetPad API
+npm run test:integration
+
+# Test extension packaging
+npm run package
+\`\`\`
+
+### Test Guidelines
+
+- Write tests for new functionality
+- Update tests when changing existing functionality
+- Test both success and failure scenarios
+- Include integration tests for API interactions
+
+## 📚 Documentation
+
+### Documentation Standards
+
+- Keep README.md up to date
+- Document new configuration options
+- Include examples for new features
+- Update CHANGELOG.md for releases
+
+### JSDoc Standards
+
+\`\`\`javascript
+/**
+ * Analyzes the provided code using NetPad API
+ * @param {string} code - The code to analyze
+ * @param {string} language - Programming language of the code
+ * @param {string} [analysisType='summary'] - Type of analysis to perform
+ * @returns {Promise<Object>} Analysis results from NetPad
+ * @throws {Error} When API request fails
+ */
+async function analyzeCode(code, language, analysisType = 'summary') {
+    // Implementation
+}
+\`\`\`
+
+## 🏷️ Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mrlynn/netpad-cursor-extensions/tags).
+
+### Release Process
+
+1. Update version in `package.json`
+2. Update `CHANGELOG.md`
+3. Create release notes
+4. Tag the release
+5. Build and publish extension package
+
+## 📄 License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+## 🆘 Getting Help
+
+- Join our [GitHub Discussions](https://github.com/mrlynn/netpad-cursor-extensions/discussions)
+- Check the [Wiki](https://github.com/mrlynn/netpad-cursor-extensions/wiki) for detailed guides
+- Open an [issue](https://github.com/mrlynn/netpad-cursor-extensions/issues) for bugs or questions
+
+## 👥 Code of Conduct
+
+### Our Pledge
+
+We are committed to making participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+
+### Our Standards
+
+Examples of behavior that contributes to creating a positive environment include:
+
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards other community members
+
+### Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances.
+
+## 🙏 Recognition
+
+Contributors who make significant improvements will be:
+
+- Added to the Contributors section in README.md
+- Mentioned in release notes
+- Given credit in the extension's About section
+
+Thank you for contributing to NetPad for Cursor! 🎉
 ```
 
 # cursor/manifest.json
@@ -369,7 +912,7 @@ scripts/
     "displayName": "NetPad for Cursor",
     "description": "AI-powered code analysis and assistance via NetPad API - Optimized for Cursor",
     "version": "1.0.0",
-    "publisher": "your-publisher-name",
+    "publisher": "michael-lynn",
     "engines": {
         "vscode": "^1.74.0",
         "cursor": "^0.1.0"
@@ -665,6 +1208,7 @@ scripts/
     "homepage": "https://github.com/mrlynn/netpad-cursor-extensions#readme",
     "license": "MIT"
 }
+
 ```
 
 # cursor/media/netpad.png
@@ -675,15 +1219,247 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Binary
 
+# cursor/netpad-cursor-1.0.1.vsix
+
+This is a binary file of the type: Binary
+
+# cursor/netpad-cursor-1.0.2.vsix
+
+This is a binary file of the type: Binary
+
 # cursor/package.json
 
 ```json
 {
   "name": "netpad-cursor",
-  "version": "1.0.0",
-  "description": "NetPad AI assistant for Cursor editor",
-  "main": "src/extension.js",
+  "displayName": "NetPad for Cursor",
+  "description": "🚀 AI-powered code intelligence: Advanced analysis, data lineage extraction, and smart refactoring for modern developers",
+  "version": "1.0.2",
   "publisher": "michael-lynn",
+  "engines": {
+    "vscode": "^1.74.0",
+    "cursor": "^0.1.0"
+  },
+  "icon": "media/netpad.png",
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "artificial intelligence",
+    "code analysis",
+    "data lineage",
+    "refactoring",
+    "sql analysis",
+    "etl",
+    "code intelligence",
+    "netpad",
+    "cursor",
+    "developer tools",
+    "productivity",
+    "machine learning",
+    "code quality",
+    "optimization"
+  ],
+  "activationEvents": [
+    "onCommand:netpad.analyzeCode",
+    "onCommand:netpad.explainCode",
+    "onCommand:netpad.refactorCode",
+    "onCommand:netpad.extractDataLineage",
+    "onCommand:netpad.getTools",
+    "onCommand:netpad.runCustomWorkflow",
+    "onCommand:netpad.sqlMetadataLookup",
+    "onCommand:netpad.openSidebar"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "netpad.analyzeCode",
+        "title": "🔍 Analyze Code",
+        "category": "NetPad",
+        "icon": "$(search)"
+      },
+      {
+        "command": "netpad.explainCode",
+        "title": "💬 Explain Code",
+        "category": "NetPad",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "netpad.refactorCode",
+        "title": "🔧 Refactor Code",
+        "category": "NetPad",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "netpad.extractDataLineage",
+        "title": "🌐 Extract Data Lineage",
+        "category": "NetPad",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "netpad.getTools",
+        "title": "🛠️ Get Available Tools",
+        "category": "NetPad",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "netpad.runCustomWorkflow",
+        "title": "⚙️ Run Custom Workflow",
+        "category": "NetPad",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "netpad.sqlMetadataLookup",
+        "title": "🗄️ SQL Metadata Lookup",
+        "category": "NetPad",
+        "icon": "$(database)"
+      },
+      {
+        "command": "netpad.openSidebar",
+        "title": "📋 Open NetPad Sidebar",
+        "category": "NetPad",
+        "icon": "$(sidebar-left)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection",
+          "group": "netpad@1"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection",
+          "group": "netpad@2"
+        },
+        {
+          "command": "netpad.refactorCode",
+          "when": "editorHasSelection",
+          "group": "netpad@3"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection",
+          "group": "netpad@4"
+        },
+        {
+          "command": "netpad.sqlMetadataLookup",
+          "when": "editorHasSelection && editorLangId =~ /sql/",
+          "group": "netpad@5"
+        },
+        {
+          "command": "netpad.runCustomWorkflow",
+          "when": "editorHasSelection",
+          "group": "netpad@6"
+        },
+        {
+          "command": "netpad.getTools",
+          "group": "netpad@7"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "netpad.analyzeCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.explainCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.refactorCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.extractDataLineage",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.sqlMetadataLookup",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.runCustomWorkflow",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "netpad.getTools"
+        },
+        {
+          "command": "netpad.openSidebar"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "NetPad",
+      "properties": {
+        "netpad.apiUrl": {
+          "type": "string",
+          "default": "https://netpad.io/api/mcp",
+          "description": "NetPad API base URL",
+          "order": 1
+        },
+        "netpad.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NetPad API key (required for authentication)",
+          "order": 2
+        },
+        "netpad.timeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "Request timeout in milliseconds",
+          "minimum": 5000,
+          "maximum": 120000,
+          "order": 3
+        },
+        "netpad.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable detailed logging for debugging",
+          "order": 4
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "netpad.analyzeCode",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "netpad.explainCode",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "netpad.refactorCode",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node ../scripts/testNetPadIntegration.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@vscode/vsce": "^2.19.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mrlynn/netpad-cursor-extensions"
@@ -691,38 +1467,492 @@ This is a binary file of the type: Binary
   "bugs": {
     "url": "https://github.com/mrlynn/netpad-cursor-extensions/issues"
   },
-  "icon": "media/netpad.png",
-  "engines": {
-    "vscode": "^1.85.0"
-  },
-  "contributes": {
-    "commands": [
-      {
-        "command": "netpad.getTools",
-        "title": "NetPad: Get Available Tools"
-      }
-    ]
-  },
-  "scripts": {
-    "test": "node ../scripts/testNetPadIntegration.js"
-  },
-  "activationEvents": [
-    "onCommand:netpad.analyzeCode",
-    "onCommand:netpad.explainCode",
-    "onCommand:netpad.refactorCode",
-    "onCommand:netpad.extractDataLineage",
-    "onCommand:netpad.runCustomWorkflow",
-    "onCommand:netpad.sqlMetadataLookup",
-    "onCommand:netpad.openSidebar"
-  ],
-  "dependencies": {
-    "axios": "^1.6.0",
-    "dotenv": "^16.5.0"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.74.0"
-  }
+  "homepage": "https://github.com/mrlynn/netpad-cursor-extensions#readme",
+  "license": "MIT"
 }
+
+```
+
+# cursor/README.md
+
+```md
+# 🚀 NetPad for Cursor
+
+<div align="center">
+
+![NetPad Logo](https://github.com/mrlynn/netpad-cursor-extensions/raw/main/cursor/media/netpad.png)
+
+**AI-Powered Code Intelligence for Cursor IDE**
+
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/mrlynn/netpad-cursor-extensions)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Cursor](https://img.shields.io/badge/Cursor-Ready-purple.svg)](https://cursor.sh)
+[![NetPad](https://img.shields.io/badge/Powered%20by-NetPad%20AI-orange.svg)](https://netpad.io)
+
+*Supercharge your coding workflow with intelligent analysis, refactoring, and data lineage insights*
+
+[🔗 Get API Access](https://netpad.io) • [📖 Documentation](https://github.com/mrlynn/netpad-cursor-extensions/wiki) • [🐛 Report Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
+
+</div>
+
+---
+
+## ✨ Why NetPad for Cursor?
+
+NetPad transforms your Cursor IDE into an **AI-powered development powerhouse**. Unlike generic AI assistants, NetPad specializes in deep code analysis, enterprise-grade data lineage extraction, and intelligent refactoring suggestions that understand your codebase's context.
+
+### 🎯 **Perfect for Modern Developers**
+- **Data Engineers**: Extract lineage from complex ETL pipelines
+- **Backend Developers**: Analyze API patterns and database interactions  
+- **DevOps Engineers**: Understand infrastructure-as-code dependencies
+- **Full-Stack Teams**: Get intelligent refactoring for any language
+
+---
+
+## 🌟 Features That Set Us Apart
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔍 **Intelligent Code Analysis**
+- **Context-Aware Insights**: Understands your code's purpose, not just syntax
+- **Multi-Language Support**: JavaScript, Python, Java, C#, SQL, and more
+- **Performance Analysis**: Identify bottlenecks and optimization opportunities
+- **Security Auditing**: Spot potential vulnerabilities and security issues
+
+</td>
+<td width="50%">
+
+### 🌐 **Data Lineage Extraction**
+- **ETL Pipeline Mapping**: Visualize data flow through transformations
+- **Database Dependency Analysis**: Understand table relationships
+- **API Data Flow**: Track data through microservices
+- **Compliance Ready**: Generate reports for data governance
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🔧 **Smart Refactoring**
+- **Architecture-Aware Suggestions**: Improvements that fit your patterns
+- **Performance Optimizations**: Speed up your code intelligently
+- **Code Quality Enhancement**: Improve maintainability and readability
+- **Best Practice Enforcement**: Follow industry standards automatically
+
+</td>
+<td>
+
+### 🗄️ **SQL Intelligence**
+- **Query Optimization**: Make your databases faster
+- **Schema Analysis**: Understand complex table relationships
+- **Migration Planning**: Safe database evolution strategies
+- **Index Recommendations**: Optimize query performance
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+### 1️⃣ **Installation**
+
+**Option A: From VSIX (Recommended)**
+\`\`\`bash
+# Download the latest release
+curl -L https://github.com/mrlynn/netpad-cursor-extensions/releases/latest/download/netpad-cursor-1.0.0.vsix -o netpad-cursor.vsix
+
+# Install in Cursor
+# Cmd/Ctrl + Shift + P → "Extensions: Install from VSIX..." → Select the file
+\`\`\`
+
+**Option B: From Source**
+\`\`\`bash
+git clone https://github.com/mrlynn/netpad-cursor-extensions.git
+cd netpad-cursor-extensions/cursor
+npm install
+npm run package
+# Install the generated .vsix file in Cursor
+\`\`\`
+
+### 2️⃣ **Get Your NetPad API Key**
+1. Visit [netpad.io](https://netpad.io) and create your account
+2. Generate your API key from the dashboard
+3. Keep it handy for the next step!
+
+### 3️⃣ **Configure the Extension**
+\`\`\`json
+// In Cursor Settings (Cmd/Ctrl + ,)
+{
+  "netpad.apiUrl": "https://netpad.io/api/mcp",
+  "netpad.apiKey": "your_api_key_here",
+  "netpad.enableLogging": true
+}
+\`\`\`
+
+### 4️⃣ **Start Analyzing!**
+- Select any code → Right-click → **NetPad AI** → Choose your action
+- Or use **Command Palette** (`Cmd/Ctrl + Shift + P`) → Type "NetPad"
+
+---
+
+## 💡 Real-World Use Cases
+
+<details>
+<summary><strong>📊 Data Pipeline Analysis</strong></summary>
+
+\`\`\`python
+# Select this ETL code and use "Extract Data Lineage"
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Extract
+raw_customers = pd.read_sql("SELECT * FROM customers", engine)
+raw_orders = pd.read_sql("SELECT * FROM orders", engine)
+
+# Transform
+cleaned_customers = raw_customers.dropna()
+enriched_data = cleaned_customers.merge(raw_orders, on='customer_id')
+monthly_revenue = enriched_data.groupby(['year', 'month']).revenue.sum()
+
+# Load
+monthly_revenue.to_sql('revenue_summary', engine, if_exists='replace')
+\`\`\`
+
+**NetPad will generate:**
+- Complete data lineage diagram
+- Table dependency mapping
+- Transformation impact analysis
+- Performance optimization suggestions
+
+</details>
+
+<details>
+<summary><strong>🔧 Legacy Code Refactoring</strong></summary>
+
+\`\`\`javascript
+// Select this code and use "Refactor Code"
+function processUserData(users) {
+    var result = [];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].status == 'active') {
+            result.push({
+                id: users[i].id,
+                name: users[i].firstName + ' ' + users[i].lastName,
+                email: users[i].email.toLowerCase()
+            });
+        }
+    }
+    return result;
+}
+\`\`\`
+
+**NetPad suggests:**
+- Modern ES6+ syntax improvements
+- Performance optimizations
+- Type safety enhancements
+- Error handling best practices
+
+</details>
+
+<details>
+<summary><strong>🗃️ SQL Query Optimization</strong></summary>
+
+\`\`\`sql
+-- Select this query and use "SQL Metadata Lookup"
+SELECT u.name, COUNT(o.id) as order_count, SUM(o.total) as revenue
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at >= '2023-01-01'
+  AND u.status = 'active'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 5
+ORDER BY revenue DESC;
+\`\`\`
+
+**NetPad provides:**
+- Index recommendations
+- Query execution plan analysis
+- Schema relationship insights
+- Performance optimization tips
+
+</details>
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Action | Shortcut | Description |
+|--------|----------|-------------|
+| **Analyze Code** | `Ctrl/Cmd + Alt + A` | Deep analysis of selected code |
+| **Explain Code** | `Ctrl/Cmd + Alt + E` | Get detailed code explanations |
+| **Refactor Code** | `Ctrl/Cmd + Alt + R` | Smart refactoring suggestions |
+
+*💡 Tip: All commands also available via right-click context menu and Command Palette*
+
+---
+
+## 🎨 Cursor IDE Integration
+
+### **Seamless Workflow Integration**
+- **Context Menus**: Right-click any code for instant analysis
+- **Command Palette**: Quick access to all NetPad features
+- **Output Panel**: Beautifully formatted results with syntax highlighting
+- **Progress Indicators**: Real-time feedback during analysis
+- **Settings Integration**: Native Cursor settings panel support
+
+### **Optimized for Cursor's AI Features**
+- **Complements Cursor's AI**: Works alongside Cursor's built-in AI features
+- **Enhanced Context**: Provides deeper analysis than general AI assistants
+- **Specialized Workflows**: Purpose-built for code analysis and data work
+- **Enterprise Features**: Advanced capabilities for professional development
+
+---
+
+## ⚙️ Advanced Configuration
+
+<details>
+<summary><strong>🔧 Complete Settings Reference</strong></summary>
+
+\`\`\`json
+{
+  // API Configuration
+  "netpad.apiUrl": "https://netpad.io/api/mcp",
+  "netpad.apiKey": "your_api_key_here",
+  "netpad.timeout": 30000,
+  
+  // UI Preferences  
+  "netpad.enableLogging": true,
+  "netpad.showProgressNotifications": true,
+  "netpad.autoDetectLanguage": true,
+  
+  // Analysis Defaults
+  "netpad.defaultAnalysisType": "comprehensive"
+}
+\`\`\`
+
+</details>
+
+<details>
+<summary><strong>🌍 Environment Variables</strong></summary>
+
+\`\`\`bash
+# Alternative configuration via environment
+export NETPAD_API_URL="https://netpad.io/api/mcp"
+export NETPAD_API_KEY="your_api_key_here"
+export NETPAD_TIMEOUT="30000"
+export NETPAD_ENABLE_LOGGING="true"
+\`\`\`
+
+</details>
+
+<details>
+<summary><strong>🔐 Enterprise Setup</strong></summary>
+
+For enterprise deployments with custom NetPad instances:
+
+\`\`\`json
+{
+  "netpad.apiUrl": "https://your-company.netpad.internal/api/mcp",
+  "netpad.apiKey": "enterprise_api_key",
+  "netpad.timeout": 60000,
+  "netpad.enableLogging": false
+}
+\`\`\`
+
+</details>
+
+---
+
+## 🛠️ Troubleshooting
+
+### **Common Issues & Solutions**
+
+<details>
+<summary><strong>❌ "Command 'netpad.getTools' not found"</strong></summary>
+
+**Cause**: Extension didn't activate properly
+
+**Solutions**:
+1. **Reload Cursor**: `Cmd/Ctrl + Shift + P` → "Developer: Reload Window"
+2. **Check Installation**: Ensure extension appears in Extensions panel
+3. **Verify Settings**: Confirm API key is set correctly
+4. **Check Console**: `Help` → `Toggle Developer Tools` → Look for errors
+
+</details>
+
+<details>
+<summary><strong>⚠️ "NetPad API key not configured"</strong></summary>
+
+**Cause**: Missing or incorrect API credentials
+
+**Solutions**:
+1. **Get API Key**: Visit [netpad.io](https://netpad.io) and create account
+2. **Add to Settings**: `Cmd/Ctrl + ,` → Search "netpad" → Set API key
+3. **Environment Variable**: Set `NETPAD_API_KEY` in your shell
+4. **Reload Extension**: Restart Cursor after configuration
+
+</details>
+
+<details>
+<summary><strong>🔄 "Connection timeout" Errors</strong></summary>
+
+**Cause**: Network or API availability issues
+
+**Solutions**:
+1. **Check Internet**: Verify connection to netpad.io
+2. **Increase Timeout**: Set `"netpad.timeout": 60000` in settings
+3. **Verify API URL**: Ensure correct endpoint configuration
+4. **Enterprise Users**: Check firewall/proxy settings
+
+</details>
+
+<details>
+<summary><strong>📊 "No tools available" Warning</strong></summary>
+
+**Cause**: API connectivity or account access issues
+
+**Solutions**:
+1. **Verify Account**: Check NetPad dashboard for active subscription
+2. **Test Connection**: Use "NetPad: Get Available Tools" command
+3. **Check Logs**: Enable logging and review output panel
+4. **Contact Support**: Reach out via GitHub issues
+
+</details>
+
+---
+
+## 🏗️ Development & Contributing
+
+### **Building from Source**
+
+\`\`\`bash
+# Clone repository
+git clone https://github.com/mrlynn/netpad-cursor-extensions.git
+cd netpad-cursor-extensions/cursor
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Package extension
+npm run package
+
+# Install locally
+# Cmd/Ctrl + Shift + P → "Extensions: Install from VSIX..."
+\`\`\`
+
+### **Contributing Guidelines**
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+**Quick Start for Contributors**:
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and add tests
+4. Ensure tests pass: `npm test`
+5. Submit a pull request
+
+### **Extension Architecture**
+
+\`\`\`
+cursor/
+├── src/
+│   └── extension.js          # Main extension logic
+├── media/
+│   └── netpad.png           # Extension icon
+├── package.json             # Extension manifest
+├── manifest.json            # Alternative manifest (deprecated)
+└── README.md               # This file
+\`\`\`
+
+---
+
+## 📞 Support & Community
+
+<div align="center">
+
+### **Get Help & Stay Connected**
+
+[![GitHub Issues](https://img.shields.io/badge/GitHub-Issues-red?logo=github)](https://github.com/mrlynn/netpad-cursor-extensions/issues)
+[![Documentation](https://img.shields.io/badge/Docs-Wiki-blue?logo=gitbook)](https://github.com/mrlynn/netpad-cursor-extensions/wiki)
+[![NetPad Support](https://img.shields.io/badge/NetPad-Support-orange?logo=chat)](https://netpad.io/support)
+
+</div>
+
+### **Support Channels**
+
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
+- **💡 Feature Requests**: [GitHub Discussions](https://github.com/mrlynn/netpad-cursor-extensions/discussions)
+- **📖 Documentation**: [Project Wiki](https://github.com/mrlynn/netpad-cursor-extensions/wiki)
+- **🆘 General Help**: [NetPad Support](https://netpad.io/support)
+
+### **Response Times**
+- **Critical Issues**: 24 hours
+- **Bug Reports**: 2-3 business days  
+- **Feature Requests**: 1 week
+- **General Questions**: 1-2 business days
+
+---
+
+## 📋 Changelog
+
+### **v1.0.0** - *Initial Release*
+
+#### ✨ **New Features**
+- **Core Commands**: Analyze, Explain, Refactor code
+- **Data Lineage**: Extract data flow from ETL pipelines
+- **SQL Intelligence**: Metadata analysis and optimization
+- **Custom Workflows**: Extensible analysis framework
+- **Cursor Integration**: Native IDE integration with context menus
+
+#### 🔧 **Technical Improvements**
+- **Robust Error Handling**: Graceful degradation on API failures
+- **Configuration Management**: Multiple setup options
+- **Progress Indicators**: Real-time feedback during operations
+- **Logging System**: Comprehensive debugging capabilities
+
+#### 🎨 **User Experience**
+- **Intuitive UI**: Context menus and command palette integration
+- **Keyboard Shortcuts**: Quick access to common operations
+- **Output Formatting**: Beautiful, readable analysis results
+- **Settings Panel**: Native Cursor settings integration
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### **What this means for you**:
+- ✅ **Commercial Use**: Use in commercial projects
+- ✅ **Modification**: Modify the source code
+- ✅ **Distribution**: Share with others
+- ✅ **Private Use**: Use for personal projects
+- ❗ **Warranty**: No warranty provided (use at your own risk)
+- 📝 **Attribution**: Include license in distributions
+
+---
+
+<div align="center">
+
+## 🌟 **Ready to Supercharge Your Coding?**
+
+### [🚀 Get Started with NetPad for Cursor](https://netpad.io)
+
+*Transform your development workflow with AI-powered code intelligence*
+
+**Made with ❤️ for the Cursor community**
+
+[![Star on GitHub](https://img.shields.io/github/stars/mrlynn/netpad-cursor-extensions?style=social)](https://github.com/mrlynn/netpad-cursor-extensions)
+[![Follow @NetPadAI](https://img.shields.io/twitter/follow/NetPadAI?style=social)](https://twitter.com/NetPadAI)
+
+</div>
 ```
 
 # cursor/src/extension.js
@@ -746,14 +1976,24 @@ class NetPadCursorExtension {
     this.context = context;
     this.outputChannel = vscode.window.createOutputChannel('NetPad');
     
-    // Initialize API client
-    await this.initializeApiClient();
-    
-    // Fetch available tools on startup
-    await this.fetchTools();
-    
-    // Register commands
+    // Register commands first (this is critical for activation)
     this.registerCommands();
+    
+    // Initialize API client (don't fail if this fails)
+    try {
+      await this.initializeApiClient();
+    } catch (error) {
+      this.log(`API client initialization failed: ${error.message}`);
+    }
+    
+    // Try to fetch available tools, but don't fail if no API key
+    try {
+      if (this.apiClient) {
+        await this.fetchTools();
+      }
+    } catch (error) {
+      this.log(`Tool fetching failed: ${error.message}`);
+    }
     
     // Setup configuration watcher
     this.setupConfigurationWatcher();
@@ -771,45 +2011,50 @@ class NetPadCursorExtension {
     const timeout = config.get('timeout') || 30000;
 
     if (!apiKey) {
-      vscode.window.showWarningMessage('NetPad API key not configured. Please set it in settings or environment variables.');
-      return;
+      this.log('NetPad API key not configured. Some features will be limited.');
+      // Don't return early - allow extension to activate without API key
     }
 
-    this.apiClient = axios.create({
-      baseURL: apiUrl,
-      timeout: timeout,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
-        'User-Agent': 'NetPad-Cursor-Extension/1.0.0'
-      }
-    });
-
-    // Add interceptors for better error handling and logging
-    this.apiClient.interceptors.request.use(
-      config => {
-        this.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-        return config;
-      },
-      error => {
-        this.log(`Request Error: ${error.message}`);
-        return Promise.reject(error);
-      }
-    );
-
-    this.apiClient.interceptors.response.use(
-      response => {
-        this.log(`API Response: ${response.status} ${response.statusText}`);
-        return response;
-      },
-      error => {
-        this.log(`Response Error: ${error.message}`);
-        if (error.response) {
-          this.log(`Error Details: ${JSON.stringify(error.response.data, null, 2)}`);
+    // Only create API client if we have an API key
+    if (apiKey) {
+      this.apiClient = axios.create({
+        baseURL: apiUrl,
+        timeout: timeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+          'User-Agent': 'NetPad-Cursor-Extension/1.0.0'
         }
-        return Promise.reject(error);
-      }
-    );
+      });
+    }
+
+    // Add interceptors for better error handling and logging (only if client exists)
+    if (this.apiClient) {
+      this.apiClient.interceptors.request.use(
+        config => {
+          this.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+          return config;
+        },
+        error => {
+          this.log(`Request Error: ${error.message}`);
+          return Promise.reject(error);
+        }
+      );
+
+      this.apiClient.interceptors.response.use(
+        response => {
+          this.log(`API Response: ${response.status} ${response.statusText}`);
+          return response;
+        },
+        error => {
+          this.log(`Response Error: ${error.message}`);
+          if (error.response) {
+            this.log(`Error Details: ${JSON.stringify(error.response.data, null, 2)}`);
+          }
+          return Promise.reject(error);
+        }
+      );
+    }
   }
 
   /**
@@ -1094,6 +2339,18 @@ class NetPadCursorExtension {
    */
   async getTools() {
     try {
+      if (!this.apiClient) {
+        vscode.window.showErrorMessage('NetPad API not configured. Please set your API key in settings.');
+        this.showResults('NetPad Configuration Required', 
+          'To use NetPad tools, please configure your API credentials:\n\n' +
+          '1. Open Settings (Cmd/Ctrl + ,)\n' +
+          '2. Search for "netpad"\n' +
+          '3. Set your NetPad API URL and API Key\n\n' +
+          'Extension is loaded and ready to use once configured!'
+        );
+        return;
+      }
+
       await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         title: "Fetching available tools...",
@@ -1227,12 +2484,26 @@ let extensionInstance = null;
 
 async function activate(context) {
   try {
+    console.log('NetPad Cursor extension: Starting activation...');
     extensionInstance = new NetPadCursorExtension();
     await extensionInstance.initialize(context);
     console.log('NetPad Cursor extension activated successfully');
+    
+    // Show a success message to confirm activation
+    vscode.window.showInformationMessage('NetPad extension loaded! Use Command Palette to access NetPad commands.');
   } catch (error) {
     console.error('Failed to activate NetPad extension:', error);
     vscode.window.showErrorMessage(`NetPad extension activation failed: ${error.message}`);
+    
+    // Still register at least the getTools command even if initialization fails
+    try {
+      const disposable = vscode.commands.registerCommand('netpad.getTools', () => {
+        vscode.window.showErrorMessage('NetPad extension failed to initialize properly. Please check the console for errors.');
+      });
+      context.subscriptions.push(disposable);
+    } catch (fallbackError) {
+      console.error('Even fallback command registration failed:', fallbackError);
+    }
   }
 }
 
@@ -1580,26 +2851,34 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 # scripts/testCommand.js
 
 ```js
-import axios from 'axios';
 
-async function run() {
-  const response = await axios.post(process.env.NETPAD_API_URL + '/command', {
-    type: 'code_analysis',
-    input: {
-      code: "function hello() { return 'world'; }",
-      language: "javascript",
-      analysisType: "summary"
-    }
-  }, {
-    headers: {
-      'X-API-Key': process.env.NETPAD_API_KEY
-    }
-  });
+const axios = require('axios');
 
-  console.log('Response:', response.data);
+const API_URL = process.env.NETPAD_API_URL || 'https://netpad.io/api/mcp/tools';
+const API_KEY = process.env.NETPAD_API_KEY || 'mcp_fe6a518107ccad44a465a35c7a92e896';
+
+async function testConnection() {
+  try {
+    const response = await axios.get(API_URL, {
+      headers: {
+        'X-API-Key': API_KEY
+      }
+    });
+
+    console.log('✅ Connected to NetPad API successfully!');
+    console.log('Tools:', response.data.tools || response.data);
+  } catch (error) {
+    if (error.response) {
+      console.error('❌ API responded with error:', error.response.status);
+      console.error('Message:', error.response.data?.error?.message || error.response.statusText);
+    } else {
+      console.error('❌ Connection error:', error.message);
+    }
+  }
 }
 
-run().catch(console.error);
+testConnection();
+
 ```
 
 # scripts/testNetPadIntegration.js

@@ -7,3 +7,5 @@ node_modules/
 *.log
 
 CLAUDE.md
+codebase.md
+.aidigestignore

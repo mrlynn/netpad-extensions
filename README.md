@@ -1,326 +1,215 @@
-# NetPad Extensions for VSCode & Cursor
+# 🚀 NetPad Extensions: AI-Powered Code Intelligence for Every Editor
 
-AI-powered code analysis and assistance extensions that integrate with the NetPad API to provide intelligent code insights, refactoring suggestions, data lineage extraction, and more.
+<div align="center">
 
-## 🚀 Features
+![NetPad Logo](https://github.com/mrlynn/netpad-cursor-extensions/raw/main/cursor/media/netpad.png)
 
-- **Code Analysis**: Get comprehensive analysis of your code including complexity, patterns, and suggestions
-- **Code Explanation**: Receive detailed explanations of how your code works
-- **Refactoring Suggestions**: Get intelligent suggestions to improve your code structure
-- **Data Lineage Extraction**: Analyze data flow and dependencies in your code
-- **SQL Metadata Lookup**: Extract metadata and relationships from SQL queries
-- **Custom Workflows**: Run specialized analysis workflows (security audits, performance analysis, etc.)
-- **Tool Discovery**: Explore available NetPad tools and capabilities
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/mrlynn/netpad-cursor-extensions)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Cursor](https://img.shields.io/badge/Cursor-Ready-purple.svg)](https://cursor.sh)
+[![VSCode](https://img.shields.io/badge/VSCode-Coming%20Soon-lightgrey.svg)](https://code.visualstudio.com/)
+[![NetPad](https://img.shields.io/badge/Powered%20by-NetPad%20AI-orange.svg)](https://netpad.io)
 
-## 📦 Installation
+*Supercharge your coding workflow with intelligent analysis, refactoring, and data lineage insights—right inside your favorite editor!*
 
-### Prerequisites
+[🔗 Get API Access](https://netpad.io) • [📖 Documentation](https://github.com/mrlynn/netpad-cursor-extensions/wiki) • [🐛 Report Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
 
-1. **NetPad API Access**: You need a valid NetPad API key
-2. **VSCode or Cursor**: Version 1.74.0 or higher
-3. **Node.js**: Required for development and testing
-
-### VSCode Extension
-
-1. Download the `.vsix` file from the releases
-2. Install via command palette:
-   ```
-   > Extensions: Install from VSIX...
-   ```
-3. Configure your API credentials (see Configuration section)
-
-### Cursor Extension
-
-1. Clone this repository
-2. Navigate to the `cursor/` directory
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Package the extension:
-   ```bash
-   npm run package
-   ```
-5. Install the generated `.vsix` file
-
-## ⚙️ Configuration
-
-### Method 1: VS Code Settings
-
-Open VS Code settings and configure:
-
-- `netpad.apiUrl`: NetPad API base URL (default: `https://netpad.io/api/mcp`)
-- `netpad.apiKey`: Your NetPad API key (**required**)
-- `netpad.timeout`: Request timeout in milliseconds (default: 30000)
-- `netpad.enableLogging`: Enable detailed logging (default: true)
-
-### Method 2: Environment Variables
-
-Create a `.env` file in your project root:
-
-```bash
-NETPAD_API_URL=https://netpad.io/api/mcp
-NETPAD_API_KEY=your_api_key_here
-NETPAD_TIMEOUT=30000
-NETPAD_ENABLE_LOGGING=true
-```
-
-### Method 3: Settings.json
-
-Add to your VS Code `settings.json`:
-
-```json
-{
-  "netpad.apiUrl": "https://netpad.io/api/mcp",
-  "netpad.apiKey": "your_api_key_here",
-  "netpad.timeout": 30000,
-  "netpad.enableLogging": true
-}
-```
-
-## 🎯 Usage
-
-### Basic Commands
-
-#### 1. Analyze Code
-- Select code in the editor
-- Right-click → "NetPad AI" → "🔍 Analyze Code"
-- Or use keyboard shortcut: `Ctrl+Alt+A` (Windows/Linux) or `Cmd+Alt+A` (Mac)
-
-#### 2. Explain Code
-- Select code you want explained
-- Right-click → "NetPad AI" → "💬 Explain Code" 
-- Or use keyboard shortcut: `Ctrl+Alt+E` (Windows/Linux) or `Cmd+Alt+E` (Mac)
-
-#### 3. Refactor Code
-- Select code to refactor
-- Right-click → "NetPad AI" → "🔧 Refactor Code"
-- Or use keyboard shortcut: `Ctrl+Alt+R` (Windows/Linux) or `Cmd+Alt+R` (Mac)
-
-### Advanced Features
-
-#### Data Lineage Extraction
-Perfect for understanding data flow in ETL pipelines:
-
-```python
-# Select this code and run "Extract Data Lineage"
-import pandas as pd
-
-raw_data = pd.read_csv('input.csv')
-cleaned_data = raw_data.dropna()
-result = cleaned_data.groupby('category').sum()
-result.to_csv('output.csv')
-```
-
-#### SQL Metadata Lookup
-Analyze SQL queries and database schemas:
-
-```sql
--- Select this SQL and run "SQL Metadata Lookup"
-SELECT u.name, COUNT(o.id) as order_count
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id
-GROUP BY u.id, u.name
-HAVING COUNT(o.id) > 5;
-```
-
-#### Custom Workflows
-Run specialized analysis workflows:
-
-1. Select your code
-2. Command Palette → "NetPad: Run Custom Workflow"
-3. Enter workflow name (e.g., `security_audit`, `performance_analysis`)
-
-#### Tool Discovery
-Explore available NetPad capabilities:
-
-1. Command Palette → "NetPad: Get Available Tools"
-2. View the output to see all available tools and their descriptions
-
-## 🧪 Testing
-
-### Run Comprehensive Tests
-
-```bash
-# Test API connectivity and all features
-npm test
-
-# Or run the test script directly
-node scripts/testNetPadIntegration.js
-```
-
-### Manual Testing
-
-1. **Connection Test**: 
-   - Command Palette → "NetPad: Get Available Tools"
-   - Should show available tools if connection works
-
-2. **Code Analysis Test**:
-   - Select any code snippet
-   - Run "Analyze Code" command
-   - Check NetPad output panel for results
-
-3. **Error Handling Test**:
-   - Try commands without selecting code
-   - Should show appropriate error messages
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-netpad-cursor-extension/
-├── vscode/                 # VSCode extension
-│   ├── src/
-│   │   ├── extension.js    # Main extension logic
-│   │   └── commands/       # Individual command handlers
-│   └── package.json        # VSCode manifest
-├── cursor/                 # Cursor extension
-│   ├── src/
-│   │   └── extension.js    # Cursor-optimized logic
-│   └── manifest.json       # Cursor manifest
-├── common/                 # Shared utilities
-│   └── apiClient.js        # NetPad API client
-├── scripts/                # Development scripts
-│   └── testNetPadIntegration.js
-└── README.md
-```
-
-### Building from Source
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/mrlynn/netpad-cursor-extensions
-   cd netpad-cursor-extension
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment**:
-   ```bash
-   cp .env-example .env
-   # Edit .env with your API credentials
-   ```
-
-4. **Test the integration**:
-   ```bash
-   npm test
-   ```
-
-5. **Package the extension**:
-   ```bash
-   # For VSCode
-   cd vscode && npm run package
-   
-   # For Cursor
-   cd cursor && npm run package
-   ```
-
-### Development Commands
-
-```bash
-# Run tests
-npm test
-
-# Package for distribution
-npm run package
-
-# Development server (if available)
-npm run dev
-
-# Lint code
-npm run lint
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-#### 1. "API key not configured" Error
-**Solution**: Set your NetPad API key in settings or environment variables.
-
-#### 2. "No active editor" Error
-**Solution**: Make sure you have a file open and code selected.
-
-#### 3. "Connection timeout" Error
-**Solutions**:
-- Check your internet connection
-- Verify the NetPad API URL is correct
-- Increase timeout in settings
-
-#### 4. "No output received" Warning
-**Solutions**:
-- Check if the selected code is valid
-- Try with a different code snippet
-- Check NetPad service status
-
-### Debug Mode
-
-Enable detailed logging to troubleshoot issues:
-
-1. Set `netpad.enableLogging: true` in settings
-2. Open NetPad output panel: View → Output → NetPad
-3. Run commands and check the logs
-
-### API Status Check
-
-Test your API connection manually:
-
-```bash
-curl -H "X-API-Key: your_api_key" \
-     -H "Content-Type: application/json" \
-     https://netpad.io/api/mcp/tools
-```
-
-## 📊 Supported Languages
-
-- JavaScript/TypeScript
-- Python
-- Java
-- C#
-- C/C++
-- Go
-- Rust
-- PHP
-- Ruby
-- SQL
-- And more...
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite: `npm test`
-6. Commit your changes: `git commit -am 'Add feature'`
-7. Push to the branch: `git push origin feature-name`
-8. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Issues**: [GitHub Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
-- **Documentation**: [Wiki](https://github.com/mrlynn/netpad-cursor-extensions/wiki)
-- **API Documentation**: [NetPad API Docs](https://netpad.io/docs)
-
-## 🔄 Changelog
-
-### v1.0.0
-- Initial release
-- Code analysis, explanation, and refactoring
-- Data lineage extraction
-- SQL metadata analysis
-- Custom workflows
-- Tool discovery
-- Support for both VSCode and Cursor
+</div>
 
 ---
 
-**Made with ❤️ for developers using NetPad AI**
+## ✨ What is NetPad Extensions?
+
+**NetPad Extensions** is a suite of next-generation, AI-powered code intelligence tools for modern code editors. Whether you use Cursor, VSCode, or another editor (coming soon!), NetPad brings deep code analysis, enterprise-grade data lineage, and smart refactoring to your fingertips.
+
+- **Multi-Editor Support**: Cursor (now), VSCode (coming soon), and more planned
+- **Unified Experience**: Consistent, powerful features across all supported editors
+- **Enterprise-Ready**: Built for professional teams and individual developers alike
+
+---
+
+## 🌟 Features at a Glance
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔍 **Intelligent Code Analysis**
+- Context-aware insights
+- Multi-language support
+- Performance & security auditing
+
+</td>
+<td width="50%">
+
+### 🌐 **Data Lineage Extraction**
+- ETL/data pipeline mapping
+- Database dependency analysis
+- API data flow & compliance
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🔧 **Smart Refactoring**
+- Architecture-aware suggestions
+- Performance optimizations
+- Code quality enhancement
+
+</td>
+<td>
+
+### 🗄️ **SQL Intelligence**
+- Query optimization
+- Schema analysis
+- Migration planning
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🖥️ Supported Editors
+
+| Editor  | Status        | Details |
+|---------|--------------|---------|
+| **Cursor** | ✅ Available | [See Cursor README](./cursor/README.md) |
+| **VSCode** | 🚧 Coming Soon | [See VSCode README](./vscode/README.md) |
+| **Other Editors** | 🛠️ Planned | Stay tuned! |
+
+---
+
+## 💡 Real-World Use Cases
+
+<details>
+<summary><strong>📊 Data Pipeline Analysis</strong></summary>
+
+```python
+# Select this ETL code and use "Extract Data Lineage"
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Extract
+data = pd.read_sql("SELECT * FROM customers", engine)
+# ...
+```
+
+**NetPad will generate:**
+- Complete data lineage diagram
+- Table dependency mapping
+- Transformation impact analysis
+- Performance optimization suggestions
+
+</details>
+
+<details>
+<summary><strong>🔧 Legacy Code Refactoring</strong></summary>
+
+```javascript
+// Select this code and use "Refactor Code"
+function processUserData(users) {
+    var result = [];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].status == 'active') {
+            result.push({
+                id: users[i].id,
+                name: users[i].firstName + ' ' + users[i].lastName,
+                email: users[i].email.toLowerCase()
+            });
+        }
+    }
+    return result;
+}
+```
+
+**NetPad suggests:**
+- Modern ES6+ syntax improvements
+- Performance optimizations
+- Type safety enhancements
+- Error handling best practices
+
+</details>
+
+<details>
+<summary><strong>🗃️ SQL Query Optimization</strong></summary>
+
+```sql
+-- Select this query and use "SQL Metadata Lookup"
+SELECT u.name, COUNT(o.id) as order_count, SUM(o.total) as revenue
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at >= '2023-01-01'
+  AND u.status = 'active'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 5
+ORDER BY revenue DESC;
+```
+
+**NetPad provides:**
+- Index recommendations
+- Query execution plan analysis
+- Schema relationship insights
+- Performance optimization tips
+
+</details>
+
+---
+
+## 🏗️ Project Structure
+
+```
+netpad-extensions/
+├── common/      # Shared utilities
+├── cursor/      # Cursor extension (production ready)
+├── vscode/      # VSCode extension (coming soon)
+├── scripts/     # Dev/test scripts
+├── README.md    # This file
+└── ...
+```
+
+- **[cursor/README.md](./cursor/README.md)**: Full details for Cursor users
+- **[vscode/README.md](./vscode/README.md)**: VSCode instructions (coming soon)
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+**Quick Start:**
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and add tests
+4. Ensure tests pass: `npm test`
+5. Submit a pull request
+
+---
+
+## 📞 Support & Community
+
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/mrlynn/netpad-cursor-extensions/issues)
+- **💡 Feature Requests**: [GitHub Discussions](https://github.com/mrlynn/netpad-cursor-extensions/discussions)
+- **📖 Documentation**: [Project Wiki](https://github.com/mrlynn/netpad-cursor-extensions/wiki)
+- **🆘 General Help**: [NetPad Support](https://netpad.io/support)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+## 🌟 **Ready to Supercharge Your Coding?**
+
+### [🚀 Get Started with NetPad](https://netpad.io)
+
+*Transform your development workflow with AI-powered code intelligence*
+
+**Made with ❤️ for the developer community**
+
+</div>
